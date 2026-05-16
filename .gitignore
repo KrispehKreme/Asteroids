@@ -10,4 +10,4 @@ wheels/
 .venv
 
 #json files
-game_state.json1
+game_state.jsonl
