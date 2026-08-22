@@ -1,5 +1,5 @@
 from circleshape import CircleShape
-from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS
+from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS, ASTEROID_SCORE_BY_KIND
 import pygame
 from logger import log_event
 import random
@@ -7,6 +7,10 @@ import random
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
+
+    def score_value(self):
+        kind = round(self.radius / ASTEROID_MIN_RADIUS)
+        return ASTEROID_SCORE_BY_KIND.get(kind, 20)
 
     def draw(self, screen):
         pygame.draw.circle(screen, color="white", center=self.position, radius=self.radius, width=LINE_WIDTH)
