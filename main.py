@@ -7,6 +7,7 @@ from asteroid import Asteroid
 from shot import Shot
 from game_state import GameState
 from hud import Hud
+from particles import ParticleSystem, ScreenShake
 
 
 def start_new_round(groups):
@@ -44,6 +45,9 @@ def main():
     groups = (updatable, drawable, asteroids, shots)
     game_state = GameState()
     hud = Hud()
+    particles = ParticleSystem()
+    screen_shake = ScreenShake()
+    frame_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     player, asteroid_field = start_new_round(groups)
 
     while True:
@@ -59,16 +63,21 @@ def main():
             keys = pygame.key.get_pressed()
             if keys[pygame.K_r]:
                 game_state.reset()
+                particles.particles.clear()
                 player, asteroid_field = start_new_round(groups)
             elif keys[pygame.K_ESCAPE]:
                 pygame.quit()
                 return
         else:
             updatable.update(dt)
+            particles.update(dt)
+            screen_shake.update(dt)
 
             for asteroid in list(asteroids):
                 if not player.is_invulnerable() and player.collides_with(asteroid):
                     log_event("player_hit")
+                    particles.spawn_burst(player.position, count=30, color=(255, 80, 80))
+                    screen_shake.trigger(magnitude=12, duration=0.35)
                     game_state.lose_life()
                     if game_state.game_over:
                         print("Game over! Final score:", game_state.score)
@@ -81,15 +90,21 @@ def main():
                     if shot.collides_with(asteroid):
                         log_event("asteroid_shot")
                         game_state.add_score(asteroid.score_value())
+                        particles.spawn_burst(asteroid.position, count=16)
+                        screen_shake.trigger(magnitude=4, duration=0.15)
                         asteroid.split()
                         shot.kill()
 
-        screen.fill("black")
+        frame_surface.fill("black")
 
         for sprite in drawable:
-            sprite.draw(screen)
+            sprite.draw(frame_surface)
 
-        hud.draw(screen, game_state)
+        particles.draw(frame_surface)
+        hud.draw(frame_surface, game_state)
+
+        screen.fill("black")
+        screen.blit(frame_surface, screen_shake.get_offset())
 
         pygame.display.flip()
 
