@@ -1,4 +1,17 @@
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_SHOT_COOLDOWN_SECONDS, PLAYER_SPEED, PLAYER_TURN_SPEED, PLAYER_SHOOT_SPEED, PLAYER_INVULNERABILITY_SECONDS, THRUST_SOUND_COOLDOWN_SECONDS
+import random
+from constants import (
+    PLAYER_RADIUS,
+    LINE_WIDTH,
+    PLAYER_SHOT_COOLDOWN_SECONDS,
+    PLAYER_SPEED,
+    PLAYER_TURN_SPEED,
+    PLAYER_SHOOT_SPEED,
+    PLAYER_INVULNERABILITY_SECONDS,
+    THRUST_SOUND_COOLDOWN_SECONDS,
+    HYPERSPACE_COOLDOWN_SECONDS,
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+)
 from circleshape import CircleShape
 import pygame
 from shot import Shot
@@ -10,6 +23,7 @@ class Player(CircleShape):
         self.shot_cooldown = 0
         self.invulnerable_timer = 0
         self.thrust_sound_cooldown = 0
+        self.hyperspace_cooldown = 0
         self.sound_manager = sound_manager
     # in the Player class
 
@@ -40,6 +54,7 @@ class Player(CircleShape):
     def update(self, dt):
         self.shot_cooldown -= dt
         self.thrust_sound_cooldown -= dt
+        self.hyperspace_cooldown -= dt
         if self.invulnerable_timer > 0:
             self.invulnerable_timer -= dt
         keys = pygame.key.get_pressed()
@@ -59,6 +74,9 @@ class Player(CircleShape):
 
         if keys[pygame.K_SPACE]:
             self.shoot()
+
+        if keys[pygame.K_h]:
+            self.hyperspace()
 
     def move(self, dt):
         unit_vector = pygame.Vector2(0, 1)
@@ -82,3 +100,15 @@ class Player(CircleShape):
         self.thrust_sound_cooldown = THRUST_SOUND_COOLDOWN_SECONDS
         if self.sound_manager:
             self.sound_manager.play_thrust()
+
+    def hyperspace(self):
+        # Panic button: instantly jump somewhere random on the screen.
+        # True to the arcade original, this is a risk, not a rescue --
+        # there's no invulnerability grant, so you can jump straight
+        # into another asteroid. Only the cooldown keeps it in check.
+        if self.hyperspace_cooldown > 0:
+            return
+        self.position = pygame.Vector2(
+            random.uniform(0, SCREEN_WIDTH), random.uniform(0, SCREEN_HEIGHT)
+        )
+        self.hyperspace_cooldown = HYPERSPACE_COOLDOWN_SECONDS
