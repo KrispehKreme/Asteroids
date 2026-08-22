@@ -8,20 +8,19 @@ class Hud:
         self.font = pygame.font.SysFont("arial", 28)
         self.big_font = pygame.font.SysFont("arial", 64)
 
-    def draw(self, screen, game_state, high_score=None):
+    def draw(self, screen, game_state):
         score_surface = self.font.render(f"Score: {game_state.score}", True, "white")
         screen.blit(score_surface, (10, 10))
 
         lives_surface = self.font.render(f"Lives: {game_state.lives}", True, "white")
         screen.blit(lives_surface, (10, 40))
 
-        if high_score is not None:
-            high_score_surface = self.font.render(
-                f"High Score: {high_score}", True, "white"
-            )
-            rect = high_score_surface.get_rect()
-            rect.topright = (screen.get_width() - 10, 10)
-            screen.blit(high_score_surface, rect)
+        high_score_surface = self.font.render(
+            f"High Score: {game_state.high_score}", True, "white"
+        )
+        rect = high_score_surface.get_rect()
+        rect.topright = (screen.get_width() - 10, 10)
+        screen.blit(high_score_surface, rect)
 
         if game_state.game_over:
             self._draw_game_over(screen)
