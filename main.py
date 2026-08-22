@@ -8,9 +8,10 @@ from shot import Shot
 from game_state import GameState
 from hud import Hud
 from particles import ParticleSystem, ScreenShake
+from sounds import SoundManager
 
 
-def start_new_round(groups):
+def start_new_round(groups, sound_manager):
     updatable, drawable, asteroids, shots = groups
     updatable.empty()
     drawable.empty()
@@ -18,7 +19,7 @@ def start_new_round(groups):
     shots.empty()
 
     asteroid_field = AsteroidField()
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, sound_manager=sound_manager)
     return player, asteroid_field
 
 
@@ -47,8 +48,9 @@ def main():
     hud = Hud()
     particles = ParticleSystem()
     screen_shake = ScreenShake()
+    sound_manager = SoundManager()
     frame_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-    player, asteroid_field = start_new_round(groups)
+    player, asteroid_field = start_new_round(groups, sound_manager)
 
     while True:
         dt = clock.tick(60) / 1000
@@ -64,7 +66,7 @@ def main():
             if keys[pygame.K_r]:
                 game_state.reset()
                 particles.particles.clear()
-                player, asteroid_field = start_new_round(groups)
+                player, asteroid_field = start_new_round(groups, sound_manager)
             elif keys[pygame.K_ESCAPE]:
                 pygame.quit()
                 return
@@ -78,6 +80,7 @@ def main():
                     log_event("player_hit")
                     particles.spawn_burst(player.position, count=30, color=(255, 80, 80))
                     screen_shake.trigger(magnitude=12, duration=0.35)
+                    sound_manager.play_explosion()
                     game_state.lose_life()
                     if game_state.game_over:
                         print("Game over! Final score:", game_state.score)
@@ -92,6 +95,7 @@ def main():
                         game_state.add_score(asteroid.score_value())
                         particles.spawn_burst(asteroid.position, count=16)
                         screen_shake.trigger(magnitude=4, duration=0.15)
+                        sound_manager.play_explosion()
                         asteroid.split()
                         shot.kill()
 

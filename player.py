@@ -1,14 +1,16 @@
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_SHOT_COOLDOWN_SECONDS, PLAYER_SPEED, PLAYER_TURN_SPEED, PLAYER_SHOOT_SPEED, PLAYER_INVULNERABILITY_SECONDS
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_SHOT_COOLDOWN_SECONDS, PLAYER_SPEED, PLAYER_TURN_SPEED, PLAYER_SHOOT_SPEED, PLAYER_INVULNERABILITY_SECONDS, THRUST_SOUND_COOLDOWN_SECONDS
 from circleshape import CircleShape
 import pygame
 from shot import Shot
 
 class Player(CircleShape):
-    def __init__(self, x, y):
+    def __init__(self, x, y, sound_manager=None):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
         self.invulnerable_timer = 0
+        self.thrust_sound_cooldown = 0
+        self.sound_manager = sound_manager
     # in the Player class
 
     def triangle(self):
@@ -37,6 +39,7 @@ class Player(CircleShape):
 
     def update(self, dt):
         self.shot_cooldown -= dt
+        self.thrust_sound_cooldown -= dt
         if self.invulnerable_timer > 0:
             self.invulnerable_timer -= dt
         keys = pygame.key.get_pressed()
@@ -49,7 +52,8 @@ class Player(CircleShape):
 
         if keys[pygame.K_w]:
             self.move(dt)
-        
+            self.play_thrust_sound()
+
         if keys[pygame.K_s]:
             self.move(-dt)
 
@@ -69,3 +73,12 @@ class Player(CircleShape):
         else:
             Shot(self.position.x, self.position.y).velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
             self.shot_cooldown = PLAYER_SHOT_COOLDOWN_SECONDS
+            if self.sound_manager:
+                self.sound_manager.play_shoot()
+
+    def play_thrust_sound(self):
+        if self.thrust_sound_cooldown > 0:
+            return
+        self.thrust_sound_cooldown = THRUST_SOUND_COOLDOWN_SECONDS
+        if self.sound_manager:
+            self.sound_manager.play_thrust()
