@@ -1,0 +1,45 @@
+import json
+
+STARTING_LIVES = 3
+HIGH_SCORE_FILE = "highscore.json"
+
+
+class GameState:
+    """Tracks score, lives, and game-over/restart status for a single session."""
+
+    def __init__(self):
+        self.score = 0
+        self.lives = STARTING_LIVES
+        self.game_over = False
+        self.high_score = self._load_high_score()
+
+    def add_score(self, points):
+        self.score += points
+
+    def lose_life(self):
+        self.lives -= 1
+        if self.lives <= 0:
+            self.game_over = True
+            self._save_high_score()
+
+    def reset(self):
+        self.score = 0
+        self.lives = STARTING_LIVES
+        self.game_over = False
+
+    def _load_high_score(self):
+        try:
+            with open(HIGH_SCORE_FILE) as f:
+                return json.load(f).get("high_score", 0)
+        except (FileNotFoundError, json.JSONDecodeError, ValueError):
+            return 0
+
+    def _save_high_score(self):
+        if self.score <= self.high_score:
+            return
+        self.high_score = self.score
+        try:
+            with open(HIGH_SCORE_FILE, "w") as f:
+                json.dump({"high_score": self.high_score}, f)
+        except OSError:
+            pass
