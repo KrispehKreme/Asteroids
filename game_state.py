@@ -20,7 +20,7 @@ class GameState:
         self.multiplier = 1.0
 
     def add_score(self, points):
-        self.score += int(points * self.multiplier)
+        self.score += round(points * self.multiplier)
 
     def lose_life(self):
         self.lives = lives_remaining_after_loss(self.lives)

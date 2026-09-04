@@ -13,3 +13,8 @@ wheels/
 game_state.jsonl
 game_events.jsonl
 highscore.json
+
+# Aider run artifacts
+.aider.chat.history.md
+.aider.input.history
+.aider.tags.cache.v4/
