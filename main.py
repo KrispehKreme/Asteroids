@@ -93,6 +93,7 @@ def main():
                     if shot.collides_with(asteroid):
                         log_event("asteroid_shot")
                         game_state.add_score(asteroid.score_value())
+                        game_state.register_kill()  # Add this line
                         particles.spawn_burst(asteroid.position, count=16)
                         screen_shake.trigger(magnitude=4, duration=0.15)
                         sound_manager.play_explosion()

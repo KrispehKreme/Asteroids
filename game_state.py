@@ -16,20 +16,31 @@ class GameState:
         self.lives = STARTING_LIVES
         self.game_over = False
         self.high_score = self._load_high_score()
+        self.combo_count = 0
+        self.multiplier = 1.0
 
     def add_score(self, points):
-        self.score += points
+        self.score += int(points * self.multiplier)
 
     def lose_life(self):
         self.lives = lives_remaining_after_loss(self.lives)
         if self.lives <= 0:
             self.game_over = True
             self._save_high_score()
+        self.combo_count = 0
+        self.multiplier = 1.0
+
+    def register_kill(self):
+        self.combo_count += 1
+        if self.combo_count % 5 == 0:
+            self.multiplier = min(self.multiplier + 0.5, 3.0)
 
     def reset(self):
         self.score = 0
         self.lives = STARTING_LIVES
         self.game_over = False
+        self.combo_count = 0
+        self.multiplier = 1.0
 
     def _load_high_score(self):
         try:
