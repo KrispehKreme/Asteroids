@@ -4,6 +4,10 @@ STARTING_LIVES = 3
 HIGH_SCORE_FILE = "highscore.json"
 
 
+def lives_remaining_after_loss(lives: int) -> int:
+    return max(lives - 1, 0)
+
+
 class GameState:
     """Tracks score, lives, and game-over/restart status for a single session."""
 
@@ -17,7 +21,7 @@ class GameState:
         self.score += points
 
     def lose_life(self):
-        self.lives -= 1
+        self.lives = lives_remaining_after_loss(self.lives)
         if self.lives <= 0:
             self.game_over = True
             self._save_high_score()
