@@ -24,3 +24,7 @@ PLAYER_SHOT_COOLDOWN_SECONDS = 0.3
 
 # Smaller asteroids are harder to hit, so they're worth more.
 ASTEROID_SCORE_BY_KIND = {1: 100, 2: 50, 3: 20}
+
+def score_for_kind(radius: float) -> int:
+    kind = round(radius / ASTEROID_MIN_RADIUS)
+    return ASTEROID_SCORE_BY_KIND.get(kind, 20)
