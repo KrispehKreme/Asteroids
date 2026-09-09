@@ -1,3 +1,5 @@
+"""Entry point that initializes pygame and runs the Asteroids game loop."""
+
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from player import Player

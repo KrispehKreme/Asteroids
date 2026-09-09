@@ -1,3 +1,5 @@
+"""Spawns asteroids at screen edges on a difficulty-scaled timer."""
+
 import pygame
 import random
 from asteroid import Asteroid

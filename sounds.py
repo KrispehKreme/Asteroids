@@ -1,3 +1,5 @@
+"""Generates and manages the game's sound effects."""
+
 import array
 import math
 import random

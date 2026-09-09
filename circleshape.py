@@ -1,3 +1,5 @@
+"""Base class for circular game objects with position, collision, and screen-wrap behavior."""
+
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 

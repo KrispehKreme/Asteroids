@@ -1,3 +1,5 @@
+"""Tracks score, lives, combo multiplier, and game-over/high-score state for a session."""
+
 import json
 
 STARTING_LIVES = 3

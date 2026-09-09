@@ -1,3 +1,5 @@
+"""Defines the Player class, handling ship movement, shooting, and collisions."""
+
 import random
 from constants import (
     PLAYER_RADIUS,

@@ -1,3 +1,5 @@
+"""Renders the score, lives, high score, and game-over overlay to the screen."""
+
 import pygame
 
 

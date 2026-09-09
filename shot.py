@@ -1,3 +1,5 @@
+"""Defines the Shot class representing a projectile fired by the player."""
+
 from constants import SHOT_RADIUS
 from circleshape import CircleShape
 from constants import LINE_WIDTH

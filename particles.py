@@ -1,3 +1,5 @@
+"""Particle effect objects used for visual effects like explosions."""
+
 import pygame
 import random
 

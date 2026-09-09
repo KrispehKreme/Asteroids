@@ -1,3 +1,5 @@
+"""Structured event logging used to record gameplay events for later inspection."""
+
 import inspect
 import json
 import math

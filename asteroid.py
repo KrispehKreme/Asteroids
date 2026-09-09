@@ -1,3 +1,5 @@
+"""Defines the Asteroid class, which splits into smaller asteroids when destroyed."""
+
 from circleshape import CircleShape
 from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS, score_for_kind
 import pygame

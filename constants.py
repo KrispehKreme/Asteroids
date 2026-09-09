@@ -1,3 +1,5 @@
+"""Central game constants (screen size, speeds, cooldowns, scoring) shared across modules."""
+
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 PLAYER_RADIUS = 20
