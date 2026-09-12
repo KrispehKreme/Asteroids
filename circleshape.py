@@ -33,7 +33,7 @@ class CircleShape(pygame.sprite.Sprite):
         # Wrap around screen edges once fully off-screen, so objects
         # re-enter from the opposite side instead of drifting forever.
         if self.position.x < -self.radius:
-            self.position.x = SCREEN_WIDTH + self.radius
+            self.position.x = SCREEN_WIDTH - self.radius
         elif self.position.x > SCREEN_WIDTH + self.radius:
             self.position.x = -self.radius
 
