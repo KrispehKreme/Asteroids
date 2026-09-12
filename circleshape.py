@@ -27,7 +27,7 @@ class CircleShape(pygame.sprite.Sprite):
     def collides_with(self, other):
         distance = self.position - other.position
         distance_check = self.radius + other.radius
-        return distance.length() <= distance_check
+        return distance.length() < distance_check
 
     def wrap_position(self):
         # Wrap around screen edges once fully off-screen, so objects
